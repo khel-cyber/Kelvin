@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Site Info -->
-    <title>{{ name }} - Resume</title>
+    <title>{{ name }} - CV</title>
     <meta name="description" content="{{ name }} - {{ summary }}">
     <meta name="author" content="{{ name }}">
 
@@ -42,8 +42,8 @@
     <meta name="theme-color" content="#fafafa">
 
     <!-- Favicon for all browsers -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.png" sizes="any">
+    <link rel="icon" href="/icon.png" type="image/svg+xml">
 
     <!-- Apple touch icon for iOS devices -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
@@ -112,30 +112,90 @@
               {% endfor %}
             </section>
           {% endif %}
+          
 
-          {% if projects %}
+          {% if education %}
             <section>
-              <h2 class="section-heading">Projects</h2>
-              {% for project in projects %}
+              <h2 class="section-heading">Education</h2>
+              {% for edu in education %}
                 <section>
                   <h3>
-                    {% if project.url %}
-                      <a href="{{ project.url }}">{{ project.title }}</a>
+                    {% if edu.url %}
+                      <a href="{{ edu.url }}">{{ edu.institution }}</a>
                     {% else %}
-                      {{ project.title }}
+                      {{ edu.institution }}
                     {% endif %}
                   </h3>
-                  {% if project.summary %}<p>{{ project.summary }}</p>{% endif %}
-                  {% if project.highlights %}
+                  {% if edu.location %}<p class="section-label">{{ edu.location }}</p>{% endif %}
+                  {% if edu.degrees %}
+                    <h4>Degrees</h4>
                     <ul>
-                      {% for highlight in project.highlights %}<li>{{ highlight }}</li>{% endfor %}
+                      {% for deg in edu.degrees %}<li>{{ deg }}</li>{% endfor %}
                     </ul>
+                  {% endif %}
+                  {% if edu.honors %}
+                    <h4>Honors</h4>
+                    <ul>
+                      {% for hon in edu.honors %}<li>{{ hon }}</li>{% endfor %}
+                    </ul>
+                  {% endif %}
+                  {% if edu.gpa_major or edu.gpa_cumulative or edu.graduation_date %}
+                    <p>
+                      {% if edu.gpa_major %}<span class="block">GPA in Major: {{ edu.gpa_major }}</span>{% endif %}
+                      {% if edu.gpa_cumulative %}<span class="block">Cumulative GPA: {{ edu.gpa_cumulative }}</span>{% endif %}
+                      {% if edu.graduation_date %}<span class="block">Graduation Date: {{ edu.graduation_date }}</span>{% endif %}
+                    </p>
+                  {% endif %}
+                </section>
+              {% endfor %}
+            </section>
+          {% endif %}
+
+          
+
+          {% if interests %}
+            <section>
+              <h2 class="section-heading">Interests</h2>
+              {% for interest in interests %}
+                <section>
+                  <h3>{{ interest.name }}</h3>
+                  {% if interest.summary %}<p>{{ interest.summary }}</p>{% endif %}
+                  {% if interest.images %}
+                    <div class="gallery side-gallery">
+                      {% for img in interest.images %}
+                        <figure>
+                          <img width="600"
+                               height="338"
+                               src="{{ img.img_path }}"
+                               alt="{{ img.caption }}">
+                          <figcaption>{{ img.caption }}</figcaption>
+                        </figure>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </section>
+              {% endfor %}
+            </section>
+          {% endif %}
+
+          {% if references %}
+            <section>
+              <h2 class="section-heading">References</h2>
+              {% for ref in references %}
+                <section>
+                  {% if ref.name %}<h3>{{ ref.name }}</h3>{% endif %}
+                  {% if ref.relation %}<p class="section-label">{{ ref.relation }}</p>{% endif %}
+                  {% if ref.reference %}
+                    <blockquote>
+                      {{ ref.reference }}
+                    </blockquote>
                   {% endif %}
                 </section>
               {% endfor %}
             </section>
           {% endif %}
         </main>
+          
 
         <!-- Sidebar Section -->
         <aside>
@@ -147,6 +207,28 @@
                   <li>
                     <h3>{{ lang.language }}</h3>
                     <p class="section-label">{{ lang.fluency }}</p>
+                  </li>
+                {% endfor %}
+              </ul>
+            </section>
+          {% endif %}
+
+          {% if skills %}
+            <section>
+              <h2 class="section-heading">Skills</h2>
+              <ul class="unstyled-list">
+                {% for skill in skills %}
+                  <li>
+                    <h3>{{ skill.name }}</h3>
+                    <div class="skill-bar">
+                      <div class="skill-bar-fill w-{{ skill.proficiency }}"
+                           role="meter"
+                           aria-valuenow="{{ skill.proficiency }}"
+                           aria-valuemin="0"
+                           aria-valuemax="100">
+                        <span class="skill-bar-label">{{ skill.proficiency_label }}</span>
+                      </div>
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
